@@ -1,0 +1,236 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Play:wght@400;700&display=swap');
+
+body {
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    background-color: #F4C7D7;
+
+    color: #2C0C3C;
+    
+}
+
+.navbar {
+
+    width: 100%;
+    height: 100px !important;
+
+    margin-bottom: 25px;
+
+    background-color: #7469B6 !important;
+
+    font-size: 25px;
+    font-family: "Play", sans-serif;
+}
+
+.navbar-brand {
+    font-size: 40px;
+
+    color: #2C0C3C;
+}
+
+.navbar-nav {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.poke-page {
+    font-family: "Play", sans-serif;
+}
+
+.modal {
+    font-family: "Play", sans-serif;
+}
+
+.select-team {
+
+    height: 50px;
+
+    background-color: #7469B6;
+
+    color: #F4C7D7;
+
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+
+
+    border-radius: 10px;
+
+    font-size: 20px;
+}
+
+
+.nav-link {
+    color: #2C0C3C;
+}
+
+.btn-poke {
+    color: #F4C7D7;
+
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+
+    background-color: transparent !important;
+
+    font-size: 25px;
+
+}
+
+.btn-poke:hover {
+
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
+
+    background-color: #7469B6 !important;
+
+    color: #F4C7D7;
+}
+
+.btn-poke-team {
+    background-color: #AD88C6;
+}
+
+.btn-poke-team:hover {
+    background-color: #7469B6;
+}
+
+.form-type{
+
+    width: 15%;
+}
+.form-select{
+    background-color: #F4C7D7;
+
+    border: 1px solid #AD88C6;
+
+    box-shadow: #F4C7D7 0px 5px 15px;
+    border-radius: 10px;
+
+    font-size: 20px;
+}
+
+.btn-ajout-poke-team {
+    background-color: #AD88C6;
+    border: none;
+    border-radius: 5px;
+
+    padding: 10px;
+}
+
+.poke-page {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+
+    background-color: #F4C7D7;
+
+}
+
+.card-poke {
+
+    background-color: #FFE6E6;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    height: 100%;
+
+    margin: 25px;
+    padding: 15px;
+
+    box-shadow: #AD88C6 0px 5px 15px;
+    border-radius: 10px;
+}
+
+.btn-poke-card {
+
+    margin: 10px;
+
+    background-color: #AD88C6;
+}
+
+.btn-poke-card:hover {
+    background-color: #7469B6;
+}
+
+.modal-content {
+    background-color: #FFE6E6;
+}
+
+.modal-header {
+    border-bottom: 1px solid #AD88C6 ;
+}
+
+.modal-body {
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.title-team {
+    font-weight: 600;
+}
+
+.text-description {
+
+    font-weight: 600;
+}
+
+.list-group {
+    border: 1px solid #AD88C6;
+}
+
+.list-group-item {
+
+    width: 300px;
+
+    background-color: transparent;
+
+    border: 1px solid #AD88C6;
+}
+
+.modal-backdrop {
+    display: none;
+}
+
+.title-team-poke {
+    font-weight: 600;
+}
+
+.btn-danger {
+    background-color: #AD88C6;
+    border: none;
+}
+
+.btn-danger:hover {
+    background-color: #7469B6;
+}
+
+.btnteam {
+    margin: 10px;
+
+    background-color: #AD88C6;
+}
+
+.btn-update-team {
+
+    margin: 10px;
+
+    background-color: #AD88C6;
+}
+
+.btn-delete-team {
+
+    margin: 10px;
+
+    background-color: #AD88C6;
+}
