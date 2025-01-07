@@ -1,20 +1,25 @@
-import { sequelize } from "../database.js";
-import { Model, DataTypes } from "sequelize";
+import { DataTypes } from 'sequelize';
+import { sequelize } from '../database.js';
+import { User } from './User.js';
 
-
-
-export class Teams extends Model {}
-
-Teams.init({ 
+const Team = sequelize.define('Team', {
     name: {
-        type: DataTypes.TEXT,
+        type: DataTypes.STRING,
         allowNull: false
     },
     description: {
-        type: DataTypes.TEXT,
+        type: DataTypes.STRING,
+        allowNull: true
+    },
+    userId: {
+        type: DataTypes.INTEGER,
+        references: {
+            model: User,
+            key: 'id'
+        },
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE'
     }
-}, {
-    sequelize,
-    tableName: "team", // nom de la table
-    timestamps: false, // desactiver les 'champs created_at' & 'updated_at'
 });
+
+export { Team };

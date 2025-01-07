@@ -1,9 +1,9 @@
 import { sequelize } from "../database.js";
 import { Model, DataTypes } from "sequelize";
 
-export class Pokemons extends Model {}
+export class Pokemon extends Model {}
 
-Pokemons.init({ 
+Pokemon.init({ 
     name: {
         type: DataTypes.TEXT,
         allowNull: false

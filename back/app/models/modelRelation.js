@@ -1,8 +1,10 @@
-import { Teams } from "../models/teamsModel.js";
-import { Pokemons } from "../models/pokemonsModel.js";
-import { Types } from "../models/typesModel.js";
+import { Team } from './teamsModel.js';
+import { Pokemon } from './pokemonsModel.js';
+import { Types } from './typesModel.js';
+import { User } from './User.js';
 
-Pokemons.belongsToMany(Teams, { 
+// Relations existantes
+Pokemon.belongsToMany(Team, { 
     as: 'teams',
     through: 'team_pokemon',
     foreignKey: 'pokemon_id',
@@ -10,7 +12,7 @@ Pokemons.belongsToMany(Teams, {
     timestamps: false
 });
 
-Teams.belongsToMany(Pokemons, {
+Team.belongsToMany(Pokemon, {
     as: 'pokemons',
     through: 'team_pokemon',
     foreignKey: 'team_id',
@@ -18,7 +20,7 @@ Teams.belongsToMany(Pokemons, {
     timestamps: false
 });
 
-Pokemons.belongsToMany(Types, {
+Pokemon.belongsToMany(Types, {
     as: 'types',
     through: 'pokemon_type',
     foreignKey: 'pokemon_id',
@@ -26,7 +28,7 @@ Pokemons.belongsToMany(Types, {
     timestamps: false
 });
 
-Types.belongsToMany(Pokemons, {
+Types.belongsToMany(Pokemon, {
     as: 'pokemons',
     through: 'pokemon_type',
     foreignKey: 'type_id',
@@ -34,4 +36,14 @@ Types.belongsToMany(Pokemons, {
     timestamps: false
 });
 
-export { Teams, Pokemons, Types };
+User.hasMany(Team, {
+    foreignKey: 'userId', 
+    as: 'teams'
+});
+
+Team.belongsTo(User, {
+    foreignKey: 'userId',
+    as: 'user'
+});
+
+export { Team, Pokemon, Types, User };

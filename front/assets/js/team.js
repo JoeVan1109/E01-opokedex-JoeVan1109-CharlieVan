@@ -6,7 +6,14 @@ import { fetchPokemon } from "./pokemon.js";
 
 export async function fetchAndInsertAllTeams() {
     try {
-        const response = await fetch(`${apiBaseUrl}/teams`);
+        const token = localStorage.getItem('token'); // Récupérez le jeton d'authentification depuis le stockage local
+        const response = await fetch(`${apiBaseUrl}/teams`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}` // Ajoutez le jeton d'authentification dans les en-têtes
+            }
+        });
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -34,14 +41,10 @@ export async function fetchAndInsertAllTeams() {
                 }
             });
         }
-
-        return teams; // Retourne le tableau des équipes
     } catch (error) {
-        console.error("Erreur lors de la récupération des équipes:", error);
-        throw error; // Propage l'erreur pour la gérer dans l'appelant
+        console.error('Erreur lors de la récupération des équipes:', error);
     }
 }
-
 
 // Fonction pour récupérer une équipe spécifique par son ID
 export async function fetchTeam(id) {
