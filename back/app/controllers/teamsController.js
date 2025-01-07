@@ -44,12 +44,13 @@ export const getOneTeam = async (req, res) => {
         console.error("Erreur lors de la récupération de l'équipe:", error);
         res.status(500).json({ error: error.message });
     }
-}
+};
 
 export const createTeam = async (req, res) => {
     try {
         const { name, description } = req.body;
-        const newTeam = await Team.create({ name, description });
+        const userId = req.user.userId; // Récupérez l'ID de l'utilisateur à partir du jeton
+        const newTeam = await Team.create({ name, description, user_id: userId });
         res.status(201).json(newTeam);
     } catch (error) {
         res.status(500).json({ error: error.message });

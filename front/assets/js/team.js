@@ -251,42 +251,30 @@ export function initDeleteTeamButton() {
 
 // Fonction pour créer une nouvelle équipe
 export async function createTeam(teamData) {
-    console.log("Début de la création de l'équipe");
-    console.log("Données de l'équipe à envoyer:", teamData);
-    console.log("URL de l'API:", `${apiBaseUrl}/teams`);
-
     try {
+        const token = localStorage.getItem('token'); // Récupérez le jeton d'authentification depuis le stockage local
         const response = await fetch(`${apiBaseUrl}/teams`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}` // Ajoutez le jeton d'authentification dans les en-têtes
             },
             body: JSON.stringify(teamData)
         });
 
-        console.log("Réponse reçue - Statut:", response.status);
-        console.log("Réponse reçue - Headers:", Object.fromEntries(response.headers));
-
         if (!response.ok) {
-            let errorData;
-            try {
-                errorData = await response.json();
-            } catch (e) {
-                errorData = await response.text();
-            }
-            console.error("Erreur détaillée:", errorData);
-            throw new Error(`HTTP error! status: ${response.status}, message: ${JSON.stringify(errorData)}`);
+            const errorText = await response.text(); // Lire le corps de la réponse une seule fois
+            throw new Error(`HTTP error! status: ${response.status}, message: ${errorText}`);
         }
 
-        const result = await response.json();
-        console.log("Équipe créée avec succès:", result);
-        return result;
+        const team = await response.json();
+        return team;
     } catch (error) {
-        console.error("Erreur lors de la création de l'équipe:", error);
-        console.error("Stack trace:", error.stack);
+        console.error('Erreur lors de la création de l\'équipe:', error);
         throw error;
     }
 }
+
 
 export async function afficheTeam(team) {
 

@@ -11,7 +11,7 @@ const Team = sequelize.define('Team', {
         type: DataTypes.STRING,
         allowNull: true
     },
-    userId: {
+    user_id: {
         type: DataTypes.INTEGER,
         references: {
             model: User,
@@ -20,6 +20,9 @@ const Team = sequelize.define('Team', {
         onDelete: 'CASCADE',
         onUpdate: 'CASCADE'
     }
+}, {
+    tableName: 'team',
+    timestamps: false // Désactivez les timestamps
 });
 
 export { Team };

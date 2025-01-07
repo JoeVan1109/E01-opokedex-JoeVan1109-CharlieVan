@@ -1,4 +1,4 @@
-function updateNavbar(isLoggedIn) {
+export function updateNavbar(isLoggedIn) {
     const authItem = document.getElementById('authItem');
     const teamItem = document.getElementById('teamItem');
     const createTeamItem = document.getElementById('createTeamItem');

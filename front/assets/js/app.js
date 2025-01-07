@@ -10,8 +10,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         await initPokeModal();
         console.log("Modal Pokémon initialisée");
         
-        await initTeam();
-        console.log("Fonctionnalité d'équipe initialisée");
+
         
         await fetchAndInsertAllPokemon();
         console.log("Pokémon récupérés et insérés");
@@ -22,6 +21,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         // Vérifiez si l'utilisateur est connecté
         const token = localStorage.getItem('token');
         if (token) {
+
+            await initTeam();
+            console.log("Fonctionnalité d'équipe initialisée");
+
             await fetchAndInsertAllTeams(); // Récupérer les équipes seulement si l'utilisateur est connecté
             console.log("Équipes récupérées et insérées");
         } else {
