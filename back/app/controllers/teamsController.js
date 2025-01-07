@@ -1,6 +1,8 @@
 import { Team } from "../models/modelRelation.js";
 import { Pokemon } from "../models/modelRelation.js";
 import { Types } from "../models/modelRelation.js";
+import { UserTeam } from '../models/userTeamModel.js'; // Assurez-vous d'importer le modèle UserTeam
+
 
 export const getAllTeams = async (req, res) => {
     try {
@@ -50,7 +52,13 @@ export const createTeam = async (req, res) => {
     try {
         const { name, description } = req.body;
         const userId = req.user.userId; // Récupérez l'ID de l'utilisateur à partir du jeton
-        const newTeam = await Team.create({ name, description, user_id: userId });
+
+        // Créez la nouvelle équipe
+        const newTeam = await Team.create({ name, description });
+
+        // Insérez une entrée dans la table user_team
+        await UserTeam.create({ user_id: userId, team_id: newTeam.id });
+
         res.status(201).json(newTeam);
     } catch (error) {
         res.status(500).json({ error: error.message });
