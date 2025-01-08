@@ -247,17 +247,13 @@ export function initDeleteTeamButton() {
     });
 }
 
-
-
 // Fonction pour créer une nouvelle équipe
 export async function createTeam(teamData) {
     try {
-        const token = localStorage.getItem('token'); // Récupérez le jeton d'authentification depuis le stockage local
         const response = await fetch(`${apiBaseUrl}/teams`, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}` // Ajoutez le jeton d'authentification dans les en-têtes
+                'Content-Type': 'application/json'
             },
             body: JSON.stringify(teamData)
         });

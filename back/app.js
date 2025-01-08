@@ -1,5 +1,6 @@
 import 'dotenv/config';
 import express from 'express';
+import session from 'express-session';
 import cors from 'cors';
 import multer from 'multer';
 import { router } from './app/router.js';
@@ -15,6 +16,14 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(multer().none());
+
+// Configurez express-session
+app.use(session({
+      secret: 'pokemon',
+      resave: false,
+      saveUninitialized: true,
+      cookie: { secure: false }
+}));
 
 app.use(router);
 

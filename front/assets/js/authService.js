@@ -1,13 +1,11 @@
-import { apiBaseUrl } from "./config.js";
-
 const authService = {
-    login: async (email, password) => {
+    login: async (username, password) => {
         const response = await fetch(`${apiBaseUrl}/login`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ email, password }),
+            body: JSON.stringify({ username, password }),
         });
 
         if (!response.ok) {
@@ -15,13 +13,11 @@ const authService = {
         }
 
         const data = await response.json();
-        localStorage.setItem('token', data.token); // Stocker le token
+        localStorage.setItem('username', username); // Stockez le nom d'utilisateur
         return data;
     },
 
     register: async (username, email, password) => {
-        console.log('Envoi des données d\'inscription:', { username, email, password });
-
         const response = await fetch(`${apiBaseUrl}/register`, {
             method: 'POST',
             headers: {
@@ -32,13 +28,32 @@ const authService = {
 
         if (!response.ok) {
             const errorText = await response.text();
-            console.error('Erreur de réponse:', errorText);
             throw new Error('Échec de l\'inscription');
         }
 
         const data = await response.json();
-        localStorage.setItem('token', data.token); // Stocker le token
+        localStorage.setItem('username', username); // Stockez le nom d'utilisateur
         return data;
+    },
+
+    logout: async () => {
+        const response = await fetch(`${apiBaseUrl}/logout`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error('Échec de la déconnexion');
+        }
+
+        localStorage.removeItem('username'); // Supprimez le nom d'utilisateur
+        return response.json();
+    },
+
+    isLoggedIn: () => {
+        return !!localStorage.getItem('username');
     }
 };
 

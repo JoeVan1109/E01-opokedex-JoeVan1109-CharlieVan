@@ -1,7 +1,7 @@
 import { Team } from "../models/modelRelation.js";
 import { Pokemon } from "../models/modelRelation.js";
 import { Types } from "../models/modelRelation.js";
-import { UserTeam } from '../models/userTeamModel.js'; // Assurez-vous d'importer le modèle UserTeam
+import { UserTeam } from '../models/userTeamModel.js';
 
 
 export const getAllTeams = async (req, res) => {

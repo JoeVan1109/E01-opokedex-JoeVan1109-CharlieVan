@@ -1,4 +1,3 @@
-import jwt from 'jsonwebtoken';
 import { User } from '../models/User.js';
 import bcrypt from 'bcrypt';
 
@@ -6,23 +5,19 @@ export const login = async (req, res) => {
     const { username, password } = req.body;
 
     try {
-        // Vérifiez les identifiants de l'utilisateur
         const user = await User.findOne({ where: { username } });
         if (!user || !(await bcrypt.compare(password, user.password))) {
-            return res.status(401).json({ message: 'Identifiants invalides' });
+            return res.status(401).json({ message: 'Invalid credentials' });
         }
 
-        // Génération du token JWT
-        const token = jwt.sign(
-            { userId: user.id },
-            process.env.JWT_SECRET || 'pokedex',
-            { expiresIn: '1h' }
-        );
+        // Stockez les informations de l'utilisateur dans la session
+        req.session.userId = user.id;
+        req.session.username = user.username;
 
-        res.status(200).json({ token, userId: user.id });
+        res.status(200).json({ message: 'Login successful' });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: 'Erreur du serveur' });
+        res.status(500).json({ message: 'Server error' });
     }
 };
 
@@ -30,32 +25,30 @@ export const register = async (req, res) => {
     const { username, email, password } = req.body;
 
     try {
-        // Vérifiez si l'utilisateur existe déjà
         const existingUser = await User.findOne({ where: { username } });
-
         if (existingUser) {
-            return res.status(400).json({ message: 'Utilisateur déjà existant' });
+            return res.status(400).json({ message: 'User already exists' });
         }
 
-        // Créez un nouvel utilisateur
-        const newUser = new User({ username, email, password });
-
-        // Hashage du mot de passe
         const hashedPassword = await bcrypt.hash(password, 10);
-        newUser.password = hashedPassword;
+        const newUser = await User.create({ username, email, password: hashedPassword });
 
-        await newUser.save();
+        // Stockez les informations de l'utilisateur dans la session
+        req.session.userId = newUser.id;
+        req.session.username = newUser.username;
 
-        // Génération du token JWT
-        const token = jwt.sign(
-            { userId: newUser.id },
-            process.env.JWT_SECRET || 'pokedex', // Utilisez une variable d'environnement
-            { expiresIn: '1h' }
-        );
-
-        res.status(201).json({ token, userId: newUser.id, message: 'Utilisateur créé avec succès' });
+        res.status(201).json({ message: 'User successfully created' });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: 'Erreur du serveur' });
+        res.status(500).json({ message: 'Server error' });
     }
+};
+
+export const logout = (req, res) => {
+    req.session.destroy(err => {
+        if (err) {
+            return res.status(500).json({ message: 'Logout failed' });
+        }
+        res.status(200).json({ message: 'Logout successful' });
+    });
 };
