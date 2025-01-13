@@ -6,14 +6,7 @@ import { fetchPokemon } from "./pokemon.js";
 
 export async function fetchAndInsertAllTeams() {
     try {
-        const token = localStorage.getItem('token'); // Récupérez le jeton d'authentification depuis le stockage local
-        const response = await fetch(`${apiBaseUrl}/teams`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}` // Ajoutez le jeton d'authentification dans les en-têtes
-            }
-        });
+        const response = await fetch(`${apiBaseUrl}/teams`);
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -41,10 +34,14 @@ export async function fetchAndInsertAllTeams() {
                 }
             });
         }
+
+        return teams; // Retourne le tableau des équipes
     } catch (error) {
-        console.error('Erreur lors de la récupération des équipes:', error);
+        console.error("Erreur lors de la récupération des équipes:", error);
+        throw error; // Propage l'erreur pour la gérer dans l'appelant
     }
 }
+
 
 // Fonction pour récupérer une équipe spécifique par son ID
 export async function fetchTeam(id) {
@@ -247,30 +244,46 @@ export function initDeleteTeamButton() {
     });
 }
 
+
+
 // Fonction pour créer une nouvelle équipe
 export async function createTeam(teamData) {
+    console.log("Début de la création de l'équipe");
+    console.log("Données de l'équipe à envoyer:", teamData);
+    console.log("URL de l'API:", `${apiBaseUrl}/teams`);
+
     try {
         const response = await fetch(`${apiBaseUrl}/teams`, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
             },
             body: JSON.stringify(teamData)
         });
 
+        console.log("Réponse reçue - Statut:", response.status);
+        console.log("Réponse reçue - Headers:", Object.fromEntries(response.headers));
+
         if (!response.ok) {
-            const errorText = await response.text(); // Lire le corps de la réponse une seule fois
-            throw new Error(`HTTP error! status: ${response.status}, message: ${errorText}`);
+            let errorData;
+            try {
+                errorData = await response.json();
+            } catch (e) {
+                errorData = await response.text();
+            }
+            console.error("Erreur détaillée:", errorData);
+            throw new Error(`HTTP error! status: ${response.status}, message: ${JSON.stringify(errorData)}`);
         }
 
-        const team = await response.json();
-        return team;
+        const result = await response.json();
+        console.log("Équipe créée avec succès:", result);
+        return result;
     } catch (error) {
-        console.error('Erreur lors de la création de l\'équipe:', error);
+        console.error("Erreur lors de la création de l'équipe:", error);
+        console.error("Stack trace:", error.stack);
         throw error;
     }
 }
-
 
 export async function afficheTeam(team) {
 

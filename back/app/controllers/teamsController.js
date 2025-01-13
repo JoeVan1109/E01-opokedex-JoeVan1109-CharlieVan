@@ -1,12 +1,10 @@
-import { Team } from "../models/modelRelation.js";
-import { Pokemon } from "../models/modelRelation.js";
+import { Teams } from "../models/modelRelation.js";
+import { Pokemons } from "../models/modelRelation.js";
 import { Types } from "../models/modelRelation.js";
-import { UserTeam } from '../models/userTeamModel.js';
-
 
 export const getAllTeams = async (req, res) => {
     try {
-        const teams = await Team.findAll();
+        const teams = await Teams.findAll();
         res.json(teams);
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -18,10 +16,10 @@ export const getOneTeam = async (req, res) => {
         const { id } = req.params;
 
         console.log(id);
-        const team = await Team.findByPk(id, {
+        const team = await Teams.findByPk(id, {
             include: [{
-                model: Pokemon,
-                as: 'pokemon',
+                model: Pokemons,
+                as: 'pokemons',
                 attributes: ['id', 'name', 'hp', 'atk', 'def', 'atk_spe', 'def_spe', 'speed'],
                 through: {
                     attributes: []
@@ -46,19 +44,12 @@ export const getOneTeam = async (req, res) => {
         console.error("Erreur lors de la récupération de l'équipe:", error);
         res.status(500).json({ error: error.message });
     }
-};
+}
 
 export const createTeam = async (req, res) => {
     try {
         const { name, description } = req.body;
-        const userId = req.user.userId; // Récupérez l'ID de l'utilisateur à partir du jeton
-
-        // Créez la nouvelle équipe
-        const newTeam = await Team.create({ name, description });
-
-        // Insérez une entrée dans la table user_team
-        await UserTeam.create({ user_id: userId, team_id: newTeam.id });
-
+        const newTeam = await Teams.create({ name, description });
         res.status(201).json(newTeam);
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -69,7 +60,7 @@ export const updateTeam = async (req, res) => {
     try {
         const { id } = req.params;
         const { name, description } = req.body;
-        const updatedTeam = await Team.update(
+        const updatedTeam = await Teams.update(
             { name, description },
             { where: { id } }
         );
@@ -83,17 +74,17 @@ export const deleteTeam = async (req, res) => {
         const { id } = req.params;
 
         // Supprimer d'abord les associations dans team_pokemon
-        const deletedAssociations = await Team.findByPk(id, {
-            include: ['pokemon']
+        const deletedAssociations = await Teams.findByPk(id, {
+            include: ['pokemons']
         }).then(team => {
             if (team) {
-                return team.setPokemon([]);
+                return team.setPokemons([]);
             }
             return null;
         });
 
         // Ensuite, supprimer l'équipe
-        const deletedTeam = await Team.destroy({ where: { id } });
+        const deletedTeam = await Teams.destroy({ where: { id } });
         
         res.json({
             teamDeleted: deletedTeam,
@@ -117,9 +108,9 @@ export const addPokemonToTeam = async (req, res) => {
         console.log('Pokemon ID:', pokeId);
 
         // Recherche de l'équipe dans la base de données, en incluant ses Pokémons associés
-        const team = await Team.findByPk(teamId, {
+        const team = await Teams.findByPk(teamId, {
             include: {
-                association: 'pokemon',
+                association: 'pokemons',
             }
         });
 
@@ -129,7 +120,7 @@ export const addPokemonToTeam = async (req, res) => {
         }
 
         // Recherche du Pokémon dans la base de données
-        const pokemon = await Pokemon.findByPk(pokeId);
+        const pokemon = await Pokemons.findByPk(pokeId);
         // Si le Pokémon n'est pas trouvé, renvoyer une erreur 404
         if (!pokemon) {
             return res.status(404).json({ error: "Pokemon not found" });
@@ -139,7 +130,7 @@ export const addPokemonToTeam = async (req, res) => {
         await team.addPokemon(pokemon);
 
         // Rechargement des données de l'équipe pour inclure le nouveau Pokémon
-        await team.reload({ include: ['pokemon'] });
+        await team.reload({ include: ['pokemons'] });
 
         // Envoi de l'équipe mise à jour en réponse
         res.json(team);
@@ -162,9 +153,9 @@ export const deletePokemonFromTeam = async (req, res) => {
         console.log('Pokemon ID:', pokeId);
 
         // Recherche de l'équipe dans la base de données, en incluant ses Pokémons associés
-        const team = await Team.findByPk(teamId, {
+        const team = await Teams.findByPk(teamId, {
             include: {
-                association: 'pokemon',
+                association: 'pokemons',
             }
         });
 
@@ -174,17 +165,17 @@ export const deletePokemonFromTeam = async (req, res) => {
         }
 
         // Recherche du Pokémon dans la base de données
-        const pokemon = await Pokemon.findByPk(pokeId);
+        const pokemon = await Pokemons.findByPk(pokeId);
         // Si le Pokémon n'est pas trouvé, renvoyer une erreur 404
         if (!pokemon) {
             return res.status(404).json({ error: "Pokemon not found" });
         }
 
         // Suppression du Pokémon de l'équipe
-        await team.removePokemon(pokemon);
+        await team.removePokemons(pokemon);
 
         // Rechargement des données de l'équipe pour refléter la suppression du Pokémon
-        await team.reload({ include: ['pokemon'] });
+        await team.reload({ include: ['pokemons'] });
 
         // Envoi de l'équipe mise à jour en réponse
         res.json(team);

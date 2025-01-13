@@ -1,4 +1,4 @@
-import { Types, Pokemon } from "../models/modelRelation.js";
+import { Types, Pokemons } from "../models/modelRelation.js";
 
 export const getAllTypes = async (req, res) => {
     try {
@@ -26,9 +26,9 @@ export const getTypePokemons = async (req, res) => {
         console.log("Début de la recherche dans la base de données");
         const type = await Types.findByPk(typeId, {
             include: [{
-                model: Pokemon,
-                as: 'pokemon',
-                through: { attributes: [] }
+                model: Pokemons,
+                as: 'pokemons',
+                through: { attributes: [] } // Ceci exclut les attributs de la table de jointure
             }]
         });
         console.log("Résultat de la recherche:", type);
@@ -38,8 +38,8 @@ export const getTypePokemons = async (req, res) => {
             return res.status(404).json({ message: "Type non trouvé" });
         }
 
-        console.log(`Nombre de Pokémon trouvés: ${type.pokemon.length}`);
-        res.json(type.pokemon);
+        console.log(`Nombre de Pokémon trouvés: ${type.pokemons.length}`);
+        res.json(type.pokemons);
     } catch (error) {
         console.error("Erreur détaillée:", error);
         res.status(500).json({ message: "Erreur serveur", error: error.message });

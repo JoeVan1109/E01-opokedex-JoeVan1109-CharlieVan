@@ -1,19 +1,20 @@
-import { DataTypes } from 'sequelize';
-import { sequelize } from '../database.js';
-import { User } from './User.js';
+import { sequelize } from "../database.js";
+import { Model, DataTypes } from "sequelize";
 
-const Team = sequelize.define('Team', {
+
+
+export class Teams extends Model {}
+
+Teams.init({ 
     name: {
-        type: DataTypes.STRING,
+        type: DataTypes.TEXT,
         allowNull: false
     },
     description: {
-        type: DataTypes.STRING,
-        allowNull: true
+        type: DataTypes.TEXT,
     }
 }, {
-    tableName: 'team',
-    timestamps: false // Désactivez les timestamps
+    sequelize,
+    tableName: "team", // nom de la table
+    timestamps: false, // desactiver les 'champs created_at' & 'updated_at'
 });
-
-export { Team };

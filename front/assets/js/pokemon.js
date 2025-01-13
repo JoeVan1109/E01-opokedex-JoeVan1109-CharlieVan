@@ -14,6 +14,7 @@ export async function fetchAndInsertAllPokemon() {
     pokemons.forEach(pokemon => {
         insertPokemonInHTML(pokemon);
     });
+    
 }
 
 // Fonction pour récupérer un Pokémon spécifique par son ID
